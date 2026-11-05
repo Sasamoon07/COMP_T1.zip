@@ -23,13 +23,17 @@ Esta representação estrutural serve de base às fases seguintes de um compilad
 
 ## Estrutura do Projeto
 
-| Ficheiro | Função |
-|----------|--------|
-| `src/Lexer.x` | Especificação do analisador léxico (Alex) |
-| `src/AST.hs` | Tipos que representam a árvore sintática abstrata |
-| `Parser.y` | Gramática e construção da AST (Happy) |
-| `Main.hs` | Leitura do ficheiro Pascal e impressão dos tokens |
-| `src/examples/example.pas` | Programa Pascal de exemplo |
+| Caminho | Função |
+|---------|--------|
+| `pascal-parser.cabal` | Configuração do executável e das dependências Haskell |
+| `src/Main.hs` | Ponto de entrada: lê o ficheiro, executa o lexer e o parser e imprime os tokens e a AST |
+| `src/Lexer.x` | Especificação do analisador léxico, processada pelo Alex |
+| `src/Lexer.hs` | Código Haskell gerado a partir de `Lexer.x` |
+| `src/Parser.y` | Gramática e ações para construir a AST, processadas pelo Happy |
+| `src/Parser.hs` | Código Haskell gerado a partir de `Parser.y` |
+| `src/AST.hs` | Tipos de dados da árvore sintática abstrata |
+| `src/examples/teste1.pas`, `src/examples/teste2.pas`, `src/examples/teste3.pas` | Programas Pascal de exemplo |
+| `.vscode/tasks.json` | Tarefas de build, teste e watch configuradas para o VS Code |
 
 ## 1. Analisador Léxico (`src/Lexer.x`)
 
@@ -86,20 +90,24 @@ A AST representa o programa através de tipos algébricos de dados em Haskell, s
 
 ## Estrutura de Pastas
 
-​```
+```text
 .
+├── .vscode/
+│   └── tasks.json
 ├── pascal-parser.cabal
 ├── README.md
-├── src/
-│   ├── AST.hs
-│   ├── Lexer.x
-│   ├── Parser.y
-│   └── Main.hs
-└── examples/
-    ├── exemplo.pas
-    ├── teste2.pas
-    └── teste3.pas
-​```
+└── src/
+    ├── AST.hs
+    ├── Lexer.hs
+    ├── Lexer.x
+    ├── Main.hs
+    ├── Parser.hs
+    ├── Parser.y
+    └── examples/
+        ├── teste1.pas
+        ├── teste2.pas
+        └── teste3.pas
+```
 
 ## Requisitos
 
