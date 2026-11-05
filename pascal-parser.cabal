@@ -1,0 +1,13 @@
+cabal-version:      2.4
+name:               pascal-parser
+version:            0.1.0.0
+synopsis:           Analisador léxico e sintático para um subconjunto de Pascal
+build-type:         Simple
+
+executable pascal-parser
+    main-is:            Main.hs
+    other-modules:      AST, Lexer, Parser
+    hs-source-dirs:     src
+    build-depends:      base >=4 && <5, array
+    build-tool-depends: alex:alex, happy:happy
+    default-language:   Haskell2010
