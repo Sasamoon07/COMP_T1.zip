@@ -84,22 +84,66 @@ A AST representa o programa através de tipos algébricos de dados em Haskell, s
 - **Expressões:** constantes inteiras e booleanas, variáveis, operações binárias e unárias, `read`
 - **Comandos:** atribuição, `if-then-else`, `while`, `write`, sequências de comandos
 
-## Testar o exemplo com o lexer
+## Estrutura de Pastas
 
-```bash
-alex -o /tmp/COMP_T1-Lexer.hs src/Lexer.x
-mkdir -p /tmp/COMP_T1-build
-ghc -isrc -outputdir /tmp/COMP_T1-build Main.hs /tmp/COMP_T1-Lexer.hs -o /tmp/COMP_T1-lexer
-/tmp/COMP_T1-lexer
-```
+​```
+.
+├── pascal-parser.cabal
+├── README.md
+├── src/
+│   ├── AST.hs
+│   ├── Lexer.x
+│   ├── Parser.y
+│   └── Main.hs
+└── examples/
+    ├── exemplo.pas
+    ├── teste2.pas
+    └── teste3.pas
+​```
 
-Sem argumentos, o programa analisa `src/examples/example.pas` e imprime um token por linha. Também é possível indicar outro ficheiro:
+## Requisitos
 
-```bash
-/tmp/COMP_T1-lexer caminho/para/programa.pas
-```
+- GHC e Cabal
+- Alex e Happy (`cabal install alex happy`)
 
-Isto testa apenas a análise léxica. A análise sintática e a impressão da AST dependem de `Parser.y` e de um parser, que ainda não estão presentes no projeto.
+## Compilação e Execução
+
+​```bash
+cabal build
+cabal run pascal-parser -- examples/exemplo.pas
+​```
+
+Também é possível ler do stdin: `cabal run pascal-parser < examples/exemplo.pas`.
+
+## Exemplo de Utilização
+
+Input:
+
+​```pascal
+program P;
+begin
+  x := 2 + 3 * 4
+end.
+​```
+
+Output (AST):
+
+​```
+Program "P" [Assignment "x" (BinOp Add (IntLit 2) (BinOp Mul (IntLit 3) (IntLit 4)))]
+​```
+
+## Decisões de Design
+
+- Em Pascal o `;` separa comandos, por isso o último comando de um bloco não leva `;`.
+- O corpo de `if` e `while` é um comando simples ou um bloco `begin ... end`.
+- Precedências (da mais baixa para a mais alta): `or`, `and`, relacionais, `+ -`, `* /`, `not` e menos unário.
+- O conflito shift/reduce reportado pelo Happy é o *dangling else*, resolvido ligando o `else` ao `if` mais próximo.
+
+## Limitações
+
+- Não há declarações de variáveis (`var`), tipos, strings nem procedimentos.
+- As palavras reservadas só são reconhecidas em minúsculas.
+- Só são suportados comentários no formato `{ ... }`.
 
 ## Autor
 
