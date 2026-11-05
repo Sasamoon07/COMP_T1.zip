@@ -1,4 +1,4 @@
-program Exemplo;
+program Teste1;
 begin
   read(n);
   soma := 0;
