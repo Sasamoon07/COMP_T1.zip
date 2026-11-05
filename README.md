@@ -25,11 +25,13 @@ Esta representação estrutural serve de base às fases seguintes de um compilad
 
 | Ficheiro | Função |
 |----------|--------|
-| `Lexer.x` | Especificação do analisador léxico (Alex) |
+| `src/Lexer.x` | Especificação do analisador léxico (Alex) |
+| `src/AST.hs` | Tipos que representam a árvore sintática abstrata |
 | `Parser.y` | Gramática e construção da AST (Happy) |
-| `Main.hs` | Leitura do input, invocação do lexer e parser e impressão da AST |
+| `Main.hs` | Leitura do ficheiro Pascal e impressão dos tokens |
+| `src/examples/example.pas` | Programa Pascal de exemplo |
 
-## 1. Analisador Léxico (`Lexer.x`)
+## 1. Analisador Léxico (`src/Lexer.x`)
 
 Transforma o código-fonte numa sequência de tokens, ignorando espaços em branco, tabulações e quebras de linha.
 
@@ -82,16 +84,22 @@ A AST representa o programa através de tipos algébricos de dados em Haskell, s
 - **Expressões:** constantes inteiras e booleanas, variáveis, operações binárias e unárias, `read`
 - **Comandos:** atribuição, `if-then-else`, `while`, `write`, sequências de comandos
 
-## Compilação e Execução
+## Testar o exemplo com o lexer
 
 ```bash
-alex Lexer.x
-happy Parser.y
-ghc Main.hs -o pascal-parser
-./pascal-parser < programa.pas
+alex -o /tmp/COMP_T1-Lexer.hs src/Lexer.x
+mkdir -p /tmp/COMP_T1-build
+ghc -isrc -outputdir /tmp/COMP_T1-build Main.hs /tmp/COMP_T1-Lexer.hs -o /tmp/COMP_T1-lexer
+/tmp/COMP_T1-lexer
 ```
 
-O resultado é a AST do programa impressa no terminal.
+Sem argumentos, o programa analisa `src/examples/example.pas` e imprime um token por linha. Também é possível indicar outro ficheiro:
+
+```bash
+/tmp/COMP_T1-lexer caminho/para/programa.pas
+```
+
+Isto testa apenas a análise léxica. A análise sintática e a impressão da AST dependem de `Parser.y` e de um parser, que ainda não estão presentes no projeto.
 
 ## Autor
 
