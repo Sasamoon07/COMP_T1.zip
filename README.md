@@ -32,6 +32,7 @@ Esta representação estrutural serve de base às fases seguintes de um compilad
 | `src/Parser.y` | Gramática e ações para construir a AST, processadas pelo Happy |
 | `src/Parser.hs` | Código Haskell gerado a partir de `Parser.y` |
 | `src/AST.hs` | Tipos de dados da árvore sintática abstrata |
+| `test/ParserTests.hs` | Testes automatizados do lexer, parser e precedência dos operadores |
 | `src/examples/teste1.pas`, `src/examples/teste2.pas`, `src/examples/teste3.pas` | Programas Pascal de exemplo |
 | `.vscode/tasks.json` | Tarefas de build, teste e watch configuradas para o VS Code |
 
@@ -96,17 +97,19 @@ A AST representa o programa através de tipos algébricos de dados em Haskell, s
 │   └── tasks.json
 ├── pascal-parser.cabal
 ├── README.md
-└── src/
-    ├── AST.hs
-    ├── Lexer.hs
-    ├── Lexer.x
-    ├── Main.hs
-    ├── Parser.hs
-    ├── Parser.y
-    └── examples/
-        ├── teste1.pas
-        ├── teste2.pas
-        └── teste3.pas
+├── src/
+│   ├── AST.hs
+│   ├── Lexer.hs
+│   ├── Lexer.x
+│   ├── Main.hs
+│   ├── Parser.hs
+│   ├── Parser.y
+│   └── examples/
+│       ├── teste1.pas
+│       ├── teste2.pas
+│       └── teste3.pas
+└── test/
+    └── ParserTests.hs
 ```
 
 ## Requisitos
@@ -116,12 +119,32 @@ A AST representa o programa através de tipos algébricos de dados em Haskell, s
 
 ## Compilação e Execução
 
-​```bash
-cabal build
-cabal run pascal-parser -- examples/exemplo.pas
-​```
+Na pasta principal do projeto, compila e executa um dos exemplos existentes:
 
-Também é possível ler do stdin: `cabal run pascal-parser < examples/exemplo.pas`.
+```bash
+cabal run pascal-parser -- src/examples/teste1.pas
+```
+
+Para testar os outros exemplos, substitui `teste1.pas` por `teste2.pas` ou `teste3.pas`.
+
+Executa os testes automatizados com:
+
+```bash
+cabal test parser-tests
+```
+
+Também é possível ler código Pascal do standard input:
+
+```bash
+cabal run pascal-parser < src/examples/teste1.pas
+```
+
+Se já tiveres o GHC, Alex e Happy instalados e o Cabal não conseguir resolver as dependências, podes compilar diretamente:
+
+```bash
+ghc --make -isrc src/Main.hs -o pascal-parser
+./pascal-parser src/examples/teste1.pas
+```
 
 ## Exemplo de Utilização
 
